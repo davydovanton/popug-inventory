@@ -1,0 +1,13 @@
+form.form-signin
+  h1.h3.mb-3.font-weight-normal Please sign in
+  /label.sr-only for="inputEmail"  Email address
+  /input#inputEmail.form-control autofocus="" placeholder=("Email address") required="" type="email" /
+  /label.sr-only for="inputPassword"  Password
+  /input#inputPassword.form-control placeholder="Password" required="" type="password" /
+  //.checkbox.mb-3
+  /  label
+  /    input type="checkbox" value="remember-me" /
+  /    | Remember me
+  /button.btn.btn-lg.btn-primary.btn-block type="submit"  Sign in
+
+  = link_to 'Sign in with Auth server', "/auth/auth/keepa/", class: 'btn btn-dark btn-lg btn-block'

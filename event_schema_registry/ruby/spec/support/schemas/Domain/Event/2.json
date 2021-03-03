@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "description": "invalid json",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+  }
+}

@@ -1,0 +1,73 @@
+h1 Inventory service
+
+hr
+div
+  h2 Current account
+  = session[:account].to_h
+hr
+
+h2 Items
+
+- if current_account_admin?
+  = link_to 'Add new item', routes.new_item_path, class: 'btn btn-info'
+
+br
+br
+br
+
+h2 My items
+
+- if my_items.any?
+  div
+    table.table
+      thead
+        tr
+          th scope="col"  #
+          th scope="col"  Public ID
+          th scope="col"  Title
+          th scope="col"  Description
+          th scope="col"  Status
+          th scope="col"  Meta
+          th scope="col"
+          th scope="col"
+      tbody
+        - my_items.each do |item|
+          tr
+            th scope="row" = item.id
+            td = item.public_id	
+            td = item.title
+            td = item.description
+            td = item.status
+            td = item.meta.to_s
+            td = item_broken(item.id)
+            td = unbook_item(item.id)
+
+  br
+  br
+
+div
+  table.table
+    thead
+      tr
+        th scope="col"  #
+        th scope="col"  Public ID
+        th scope="col"  Title
+        th scope="col"  Description
+        th scope="col"  Status
+        th scope="col"  Meta
+        th scope="col"
+        th scope="col"
+    tbody
+      - items.each do |item|
+        tr
+          th scope="row" = item.id
+          td = item.public_id	
+          td = item.title
+          td = item.description
+          td = item.status
+          td = item.meta.to_s
+          td = item_broken(item.id)
+          td 
+            - if item.free?
+              = book_item(item.id)
+

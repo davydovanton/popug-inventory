@@ -1,0 +1,47 @@
+PATH
+  remote: .
+  specs:
+    schema_registry (1)
+      json-schema
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    diff-lcs (1.3)
+    highline (2.0.3)
+    json-schema (2.8.1)
+      addressable (>= 2.4)
+    options (2.3.2)
+    progress_bar (1.3.1)
+      highline (>= 1.6, < 3)
+      options (~> 2.3.0)
+    public_suffix (4.0.5)
+    rake (13.0.1)
+    rspec (3.9.0)
+      rspec-core (~> 3.9.0)
+      rspec-expectations (~> 3.9.0)
+      rspec-mocks (~> 3.9.0)
+    rspec-core (3.9.0)
+      rspec-support (~> 3.9.0)
+    rspec-expectations (3.9.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-mocks (3.9.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-support (3.9.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  progress_bar
+  rake
+  rspec
+  schema_registry!
+
+BUNDLED WITH
+   2.1.4

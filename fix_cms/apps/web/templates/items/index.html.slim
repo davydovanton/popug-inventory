@@ -1,0 +1,32 @@
+h1 Fix CMS service
+
+hr
+div
+  h2 Current account
+  = session[:account].to_h
+hr
+
+br
+
+h2 Items for fix
+
+div
+  table.table
+    thead
+      tr
+        th scope="col"  #
+        th scope="col"  Public ID
+        th scope="col"  Title
+        th scope="col"  Status
+        th scope="col"  Meta
+        th scope="col"
+    tbody
+      - items.each do |item|
+        tr
+          th scope="row" = item.id
+          td = item.public_id	
+          td = item.title
+          td = item.status
+          td = item.meta.to_s
+          td = fix_item(item.id)
+
