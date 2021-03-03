@@ -37,7 +37,7 @@ class AccountsController < ApplicationController
             position: @account.position
           }
         }
-        Produce.call(event.to_json, topic: 'accounts-stream')
+        Producer.call(event.to_json, topic: 'accounts-stream')
 
         if new_role
           event = {
