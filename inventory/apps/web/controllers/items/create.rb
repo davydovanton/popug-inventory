@@ -15,10 +15,6 @@ module Web
 
           # ----------------------------- produce event -----------------------
           event = {
-            event_id: SecureRandom.uuid,
-            event_version: 1,
-            event_time: Time.now.to_s,
-            producer: 'inventory_service',
             event_name: 'ItemsCreated',
             data: {
               public_id: item.public_id,
@@ -26,11 +22,7 @@ module Web
               description: item.description
             }
           }
-          result = SchemaRegistry.validate_event(event, 'items.created', version: 1)
-
-          if result.success?
-            WaterDrop::SyncProducer.call(event.to_json, topic: 'items-stream')
-          end
+          WaterDrop::SyncProducer.call(event.to_json, topic: 'items-stream')
           # --------------------------------------------------------------------
 
           redirect_to routes.root_path

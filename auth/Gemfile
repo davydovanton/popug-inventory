@@ -24,7 +24,6 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 # Events
-gem 'schema_registry', path: '../event_schema_registry/ruby/'
 gem 'waterdrop'
 
 # Reduces boot times through caching; required in config/boot.rb

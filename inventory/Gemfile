@@ -39,7 +39,6 @@ gem 'omniauth-accounts'
 # gem 'hanami-pagination', github: 'davydovanton/hanami-pagination'
 
 # kafka
-gem 'schema_registry', path: '../event_schema_registry/ruby/'
 gem 'karafka'
 gem 'dry-configurable', '0.8'
 gem 'waterdrop'

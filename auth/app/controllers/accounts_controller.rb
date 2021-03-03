@@ -30,7 +30,6 @@ class AccountsController < ApplicationController
         # ----------------------------- produce event -----------------------
         # Events::AccountUpdated.new(payload).to_h.to_json
         event = {
-          **account_event_data,
           event_name: 'AccountUpdated',
           data: {
             public_id: @account.public_id,
@@ -39,16 +38,17 @@ class AccountsController < ApplicationController
             position: @account.position
           }
         }
-        result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
 
-        if result.success?
-          WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
-        else
-
-        end
+        WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
         # --------------------------------------------------------------------
 
-        produce_be_event(@account.public_id, new_role) if new_role
+        if new_role
+          event = {
+            event_name: 'AccountRoleChanged',
+            data: { public_id: public_id, role: role }
+          }
+          WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts')
+        end
 
         # --------------------------------------------------------------------
 
@@ -70,15 +70,11 @@ class AccountsController < ApplicationController
 
     # ----------------------------- produce event -----------------------
     event = {
-      **account_event_data,
       event_name: 'AccountDeleted',
       data: { public_id: @account.public_id }
     }
-    result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
 
-    if result.success?
-      WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
-    end
+    WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
     # --------------------------------------------------------------------
 
     respond_to do |format|
@@ -88,15 +84,6 @@ class AccountsController < ApplicationController
   end
 
   private
-
-    def account_event_data
-      {
-        event_id: SecureRandom.uuid,
-        event_version: 1,
-        event_time: Time.now.to_s,
-        producer: 'auth_service',
-      }
-    end
 
     def current_account
       if doorkeeper_token
@@ -113,18 +100,5 @@ class AccountsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def account_params
       params.require(:account).permit(:full_name, :role)
-    end
-
-    def produce_be_event(public_id, role)
-      event = {
-        **account_event_data,
-        event_name: 'AccountRoleChanged',
-        data: { public_id: public_id, role: role }
-      }
-      result = SchemaRegistry.validate_event(event, 'accounts.role_changed', version: 1)
-
-      if result.success?
-        WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts')
-      end
     end
 end
