@@ -62,35 +62,34 @@ class KarafkaApp < Karafka::App
   # )
 
   consumer_groups.draw do
-    consumer_group :data_stream_group do
+    consumer_group :analytics_group do
       topic :'accounts-stream' do
-        consumer DataStreamConsumer
+        consumer AnalyticsConsumer
+        deserializer EmptyDeserializer.new
+      end
+
+      topic :'accounts' do
+        consumer AnalyticsConsumer
         deserializer EmptyDeserializer.new
       end
 
       topic :'items-stream' do
-        consumer DataStreamConsumer
-        deserializer EmptyDeserializer.new
-      end
-    end
-
-    consumer_group :notification_group do
-      topic :'accounts' do
-        consumer NotificationConsumer
+        consumer AnalyticsConsumer
         deserializer EmptyDeserializer.new
       end
 
       topic :'broken-items' do
-        consumer NotificationConsumer
+        consumer AnalyticsConsumer
         deserializer EmptyDeserializer.new
       end
 
       topic :'item-statuses' do
-        consumer NotificationConsumer
+        consumer AnalyticsConsumer
         deserializer EmptyDeserializer.new
       end
     end
   end
+
 end
 
 Karafka.monitor.subscribe('app.initialized') do

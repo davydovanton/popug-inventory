@@ -5,10 +5,6 @@ module KafkaApp
     class ItemsFixed < Base
       def consume
         params_batch.each do |message|
-          puts '-' * 80
-          p message
-          puts '-' * 80
-
           case message['event_name']
           when 'ItemsFixed'
             # validate data by schema

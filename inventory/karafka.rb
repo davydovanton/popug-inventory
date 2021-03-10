@@ -50,18 +50,6 @@ Karafka.monitor.subscribe(Karafka::Instrumentation::Listener)
 
 # Consumer group defined with the 0.6+ routing style (recommended)
 App.consumer_groups.draw do
-  # consumer_group :notifications do
-  #   topic :'accounts-stream' do
-  #     consumer KafkaApp::Consumers::MyTopic
-  #     parser JsonDeserializer
-  #   end
-  #
-  #   topic :'accounts' do
-  #     consumer KafkaApp::Consumers::MyTopic
-  #     parser JsonDeserializer
-  #   end
-  # end
-
   consumer_group :real_work do
     topic :'accounts-stream' do
       consumer KafkaApp::Consumers::AccountChanges
@@ -76,6 +64,18 @@ App.consumer_groups.draw do
     topic :'fixed-items' do
       consumer KafkaApp::Consumers::ItemsFixed
       parser JsonDeserializer
+    end
+
+    consumer_group :notification_group do
+      topic :'broken-items' do
+        consumer NotificationConsumer
+        deserializer EmptyDeserializer.new
+      end
+
+      topic :'items-stream' do
+        consumer NotificationConsumer
+        deserializer EmptyDeserializer.new
+      end
     end
   end
 end
