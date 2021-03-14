@@ -10,7 +10,7 @@ class NotificationConsumer < ApplicationConsumer
         # send notification to the slack channel
       when 'ItemsFixed'
         # send notification to the slack channel
-      when 'ItemsStatusChanged'
+      when 'AccountRoleChanged'
         # send notification to the slack channel
       else
         # do nothing

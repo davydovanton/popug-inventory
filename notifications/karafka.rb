@@ -62,18 +62,6 @@ class KarafkaApp < Karafka::App
   # )
 
   consumer_groups.draw do
-    consumer_group :data_stream_group do
-      topic :'accounts-stream' do
-        consumer DataStreamConsumer
-        deserializer EmptyDeserializer.new
-      end
-
-      topic :'items-stream' do
-        consumer DataStreamConsumer
-        deserializer EmptyDeserializer.new
-      end
-    end
-
     consumer_group :notification_group do
       topic :'accounts' do
         consumer NotificationConsumer
@@ -81,11 +69,6 @@ class KarafkaApp < Karafka::App
       end
 
       topic :'broken-items' do
-        consumer NotificationConsumer
-        deserializer EmptyDeserializer.new
-      end
-
-      topic :'item-statuses' do
         consumer NotificationConsumer
         deserializer EmptyDeserializer.new
       end
