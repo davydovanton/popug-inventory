@@ -19,12 +19,6 @@ GIT
     relative_time (1.1.0)
       i18n
 
-PATH
-  remote: ../event_schema_registry/ruby
-  specs:
-    schema_registry (1)
-      json-schema
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -216,8 +210,6 @@ GEM
     jquery-hanami (0.1.0)
       hanami-assets
     json (2.3.0)
-    json-schema (2.8.1)
-      addressable (>= 2.4)
     jwt (2.2.2)
     karafka (1.2.13)
       activesupport (>= 4.0)
@@ -441,7 +433,6 @@ DEPENDENCIES
   rubocop-rspec
   sass
   sassc
-  schema_registry!
   semantic_logger
   sequel (~> 4.48.0)
   shotgun
