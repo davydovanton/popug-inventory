@@ -14,10 +14,8 @@ APP_LOADER = Zeitwerk::Loader.new
 APP_LOADER.enable_reloading
 
 %w[
-  lib
   app/consumers
   app/responders
-  app/workers
 ].each(&APP_LOADER.method(:push_dir))
 
 APP_LOADER.setup
@@ -36,7 +34,7 @@ end
 
 class KarafkaApp < Karafka::App
   setup do |config|
-    config.kafka.seed_brokers = %w[kafka://192.168.1.67:9092]
+    config.kafka.seed_brokers = %w[kafka://192.168.1.68:9092]
     config.client_id = 'notification_service'
     config.backend = :inline
     config.batch_fetching = true
