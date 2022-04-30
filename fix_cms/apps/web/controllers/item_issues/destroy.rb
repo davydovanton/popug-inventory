@@ -24,6 +24,8 @@ module Web
 
           if result.success?
             WaterDrop::SyncProducer.call(event.to_json, topic: 'fixed-items')
+          else
+            # raise error
           end
           # --------------------------------------------------------------------
 

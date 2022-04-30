@@ -11,12 +11,17 @@ module KafkaApp
 
           case [message['event_name'], message['event_version']]
           when ['ItemsCreated', 1]
-            account_repo.create(
+            item_repo.create(
               public_id: message['data']['public_id'],
               title: message['data']['title'],
               status: 'new'
             )
           when ['ItemsCreated', 2]
+            new_item_repo.create(
+              public_id: message['data']['public_id'],
+              name: message['data']['title'],
+              status: 'new'
+            )
           else
             # store events in DB
           end
