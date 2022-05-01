@@ -38,11 +38,11 @@ class Account < ApplicationRecord
         position: account.position
       }
     }
-    result = SchemaRegistry.validate_event(event, 'accounts.created', version: 1)
+    # result = SchemaRegistry.validate_event(event, 'accounts.created', version: 1)
 
-    if result.success?
-      WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
-    end
+    # if result.success?
+    Producer.new.call(event, topic: 'accounts-stream')
+    # end
     # --------------------------------------------------------------------
   end
 end

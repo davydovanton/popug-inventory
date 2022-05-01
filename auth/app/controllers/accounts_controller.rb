@@ -39,13 +39,13 @@ class AccountsController < ApplicationController
             position: @account.position
           }
         }
-        result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
+        # result = SchemaRegistry.validate_event(event, 'accounts.updated', version: 1)
+        #
+        # if result.success?
+        Producer.new.call(event, topic: 'accounts-stream')
+        # else
 
-        if result.success?
-          WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
-        else
-
-        end
+        # end
         # --------------------------------------------------------------------
 
         produce_be_event(@account.public_id, new_role) if new_role
@@ -74,11 +74,12 @@ class AccountsController < ApplicationController
       event_name: 'AccountDeleted',
       data: { public_id: @account.public_id }
     }
-    result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
+    # result = SchemaRegistry.validate_event(event, 'accounts.deleted', version: 1)
+    #
+    # if result.success?
+    Producer.new.call(event, topic: 'accounts-stream')
 
-    if result.success?
-      WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts-stream')
-    end
+    # end
     # --------------------------------------------------------------------
 
     respond_to do |format|
@@ -121,10 +122,10 @@ class AccountsController < ApplicationController
         event_name: 'AccountRoleChanged',
         data: { public_id: public_id, role: role }
       }
-      result = SchemaRegistry.validate_event(event, 'accounts.role_changed', version: 1)
-
-      if result.success?
-        WaterDrop::SyncProducer.call(event.to_json, topic: 'accounts')
-      end
+      # result = SchemaRegistry.validate_event(event, 'accounts.role_changed', version: 1)
+      #
+      # if result.success?
+      Producer.new.call(event, topic: 'accounts')
+      # end
     end
 end

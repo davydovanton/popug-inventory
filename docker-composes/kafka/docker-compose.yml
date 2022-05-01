@@ -1,0 +1,76 @@
+---
+version: '3'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.2.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - popug-jira
+
+  broker:
+    image: confluentinc/cp-server:6.2.0
+    hostname: broker
+    container_name: broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+      - "29092:29092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,RMOFF_DOCKER_HACK:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092,RMOFF_DOCKER_HACK://host.docker.internal:19092
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    networks:
+      - popug-jira
+
+  db:
+    image: postgres
+    container_name: psql
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      - popug-jira
+
+  oauth:
+    container_name: oauth
+    build: ./../../auth/.
+    command: ['rails', 'server', '-p', '3000', '-b', '0.0.0.0']
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - broker
+    environment:
+      RAILS_ENV: 'development'
+      DATABASE_URL: 'postgres://postgres:password@db:5432/postgres'
+      KAFKA_URL: 'kafka://172.20.0.20:9092'
+      BROKER_ADAPTER: 'kafka'
+    networks:
+      - popug-jira
+
+# network needs to be created manually, by:
+#  docker network create popug-jira
+networks:
+  popug-jira:
+    external: true
