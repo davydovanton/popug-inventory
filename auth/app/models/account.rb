@@ -16,9 +16,8 @@ class Account < ApplicationRecord
 
   enum role: {
     admin: 'admin',
-    accounting_clerk: 'accounting_clerk',
-    repairman: 'repairman',
-    employee: 'employee'
+    worker: 'worker',
+    manager: 'manager'
   }
 
   after_create do

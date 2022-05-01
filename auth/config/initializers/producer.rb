@@ -21,11 +21,7 @@ private
     connection.close
   end
 
-  def get_rabbitmq_exchange(connection, topic)
-     if connection.exchange_exists?(topic)
-      channel.find_exchange(topic)
-    else
-      channel.fanout(topic)
-    end
+  def get_rabbitmq_exchange(channel, topic)
+    channel.find_exchange(topic) || channel.fanout(topic)
   end
 end
