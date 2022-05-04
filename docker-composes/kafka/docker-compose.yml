@@ -64,7 +64,7 @@ services:
     environment:
       RAILS_ENV: 'development'
       DATABASE_URL: 'postgres://postgres:password@db:5432/postgres'
-      KAFKA_URL: 'kafka://172.20.0.20:9092'
+      KAFKA_URL: 'kafka://broker:9092'
       BROKER_ADAPTER: 'kafka'
     networks:
       - popug-jira
